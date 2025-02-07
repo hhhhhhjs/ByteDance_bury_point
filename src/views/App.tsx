@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function App() {
   const [currentStr, setcurrentStr] = useState("");
   const hasEffectRun = useRef(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!hasEffectRun.current) {
@@ -33,8 +33,9 @@ function App() {
 
   // 跳转函数
   const handleClick = () => {
-    navigate('/login')
-  }
+    navigate("/login");
+  };
+
   return (
     <div>
       <Heading />
@@ -43,11 +44,7 @@ function App() {
           {currentStr}
         </div>
       </section>
-      <Button 
-      type="primary" 
-      className="w-full"
-      onClick={handleClick}
-      >
+      <Button type="primary" className="w-full" onClick={handleClick}>
         欢迎
       </Button>
     </div>

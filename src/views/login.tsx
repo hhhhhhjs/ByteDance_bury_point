@@ -1,6 +1,8 @@
 import { Input, message, Button } from "antd";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import Instance from "../api/axios";
+import Crytojs from "crypto-js";
 
 // 登录组件
 
@@ -8,7 +10,6 @@ const Login = () => {
   const [loadings, setLoadings] = useState<boolean[]>([]);
   let username: string = "";
   let password: string = "";
-
 
   const enterLoading = (index: number) => {
     setLoadings((prevLoadings) => {
@@ -33,14 +34,28 @@ const Login = () => {
   };
 
   // 提交函数
-  const sendmessage = () => {
+  const sendmessage = async() => {
     if (username === "" || password === "") {
       message.error("用户名或密码不能为空");
-      return
+      return;
     }
+
+try{
+
+  // 密码加密
+   await Instance.post("/api/login", {
+    username,
+    password: Crytojs.MD5(password).toString(),
+  });
+  enterLoading(0);
+  console.log(Crytojs.MD5(password).toString())
+  message.success("登录成功");
+}catch(error){
+  console.log(error)
+}
+  
     //TODO: 向后端发送数据,后端校验
-    enterLoading(0)
-    message.success("登录成功");
+  
   };
 
   return (
@@ -63,7 +78,6 @@ const Login = () => {
             autoComplete="username"
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               username = e.target.value;
-              console.log(username);
             }}
           />
           <Input.Password
@@ -75,7 +89,6 @@ const Login = () => {
             maxLength={16}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               password = e.target.value;
-              console.log(password);
               inputMonitor(e);
             }}
           />
@@ -85,8 +98,12 @@ const Login = () => {
           >
             没有账号？去注册
           </NavLink>
-          <Button type="primary" className="w-full mt-5" htmlType="submit"    className="w-full mt-5"
-            loading={loadings[0]}>
+          <Button
+            type="primary"
+            className="w-full mt-5"
+            htmlType="submit"
+            loading={loadings[0]}
+          >
             登录
           </Button>
         </div>
