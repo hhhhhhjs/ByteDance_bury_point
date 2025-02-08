@@ -1,5 +1,5 @@
 import { Input, message, Button } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Instance from "../api/axios";
 import Crytojs from "crypto-js";
@@ -12,6 +12,7 @@ const Login = () => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [active, setactive] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (username && password && password.length >= 6 && password.length <= 16) {
@@ -68,6 +69,7 @@ const Login = () => {
           setToken(res.data.data.token);
           message.success("登录成功");
           clearInput();
+          navigate('/home')
         } else {
           message.error(res.data.msg);
           clearInput();
@@ -76,8 +78,6 @@ const Login = () => {
     } catch (error) {
       console.log(error);
     }
-
-    //TODO: 向后端发送数据,后端校验
   };
 
   return (
