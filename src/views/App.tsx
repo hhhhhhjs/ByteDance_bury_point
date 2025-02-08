@@ -3,7 +3,7 @@ import { Heading } from "../components/App/heading";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getEnvInfo } from '../SDK/equipmes'
-import type { EnvInfo } from '../SDK/types/equipmes'
+import type { IEquip } from '../SDK/types/equipmes'
 
 function App() {
   const [currentStr, setcurrentStr] = useState<string>("");
@@ -16,10 +16,10 @@ function App() {
       hasEffectRun.current = true;
     }
     // 前端埋点，检测操作系统，浏览器
-     const result:EnvInfo = getEnvInfo()
+     const result:IEquip = getEnvInfo()
      console.log(result)
      // 向后端发送埋点数据
-     
+
   }, []);
 
   const arr: string[] = [
