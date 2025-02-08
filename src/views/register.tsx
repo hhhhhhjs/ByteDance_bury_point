@@ -1,4 +1,4 @@
-import { Input, message, Button, Result } from "antd";
+import { Input, message, Button } from "antd";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Crytojs from "crypto-js";

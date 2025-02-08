@@ -1,15 +1,25 @@
 import { Input, message, Button } from "antd";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Instance from "../api/axios";
 import Crytojs from "crypto-js";
+import { setToken } from "../api/token";
 
 // 登录组件
 
 const Login = () => {
   const [loadings, setLoadings] = useState<boolean[]>([]);
-  let username: string = "";
-  let password: string = "";
+  const [username, setusername] = useState<string>("");
+  const [password, setpassword] = useState<string>("");
+  const [active, setactive] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (username && password && password.length >= 6 && password.length <= 16) {
+      setactive(false);
+    } else {
+      setactive(true);
+    }
+  }, [username, password]);
 
   const enterLoading = (index: number) => {
     setLoadings((prevLoadings) => {
@@ -33,29 +43,41 @@ const Login = () => {
     }
   };
 
+  // 清除输入框
+  const clearInput = () => {
+    setusername("");
+    setpassword("");
+  };
+
   // 提交函数
-  const sendmessage = async() => {
+  const sendmessage = async () => {
     if (username === "" || password === "") {
       message.error("用户名或密码不能为空");
       return;
     }
 
-try{
+    try {
+      // 密码加密
+      Instance.post("/api/login", {
+        username,
+        password: Crytojs.MD5(password).toString(),
+      }).then((res) => {
+        if (res.data.code === 0) {
+          console.log(res);
+          enterLoading(0);
+          setToken(res.data.data.token);
+          message.success("登录成功");
+          clearInput();
+        } else {
+          message.error(res.data.msg);
+          clearInput();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
-  // 密码加密
-   await Instance.post("/api/login", {
-    username,
-    password: Crytojs.MD5(password).toString(),
-  });
-  enterLoading(0);
-  console.log(Crytojs.MD5(password).toString())
-  message.success("登录成功");
-}catch(error){
-  console.log(error)
-}
-  
     //TODO: 向后端发送数据,后端校验
-  
   };
 
   return (
@@ -75,9 +97,11 @@ try{
             type="text"
             placeholder="请输入用户名"
             className="w-80 h-10"
+            value={username}
             autoComplete="username"
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              username = e.target.value;
+              setusername(e.target.value);
+              console.log(active);
             }}
           />
           <Input.Password
@@ -86,9 +110,11 @@ try{
             className="w-80 h-10"
             style={{ marginTop: "10px" }}
             autoComplete="current-password"
+            value={password}
             maxLength={16}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              password = e.target.value;
+              setpassword(e.target.value);
+              console.log(active);
               inputMonitor(e);
             }}
           />
@@ -103,6 +129,7 @@ try{
             className="w-full mt-5"
             htmlType="submit"
             loading={loadings[0]}
+            disabled={active}
           >
             登录
           </Button>
