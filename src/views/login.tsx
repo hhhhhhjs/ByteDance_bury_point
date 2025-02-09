@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Instance from "../api/axios";
 import Crytojs from "crypto-js";
 import { setToken } from "../api/token";
+import { debounce } from "../api/Anti-shake";
 
 // 登录组件
 
@@ -21,7 +22,7 @@ const Login = () => {
       setactive(true);
     }
   }, [username, password]);
-
+  
   const enterLoading = (index: number) => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
@@ -35,7 +36,7 @@ const Login = () => {
         newLoadings[index] = false;
         return newLoadings;
       });
-    }, 3000);
+    }, 1000);
   };
   const inputMonitor = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length >= 16) {
@@ -79,6 +80,9 @@ const Login = () => {
       console.log(error);
     }
   };
+  
+  // 防抖调用
+  const debouncedSendMessage = debounce(sendmessage, 1000);
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
@@ -89,7 +93,7 @@ const Login = () => {
         action=""
         onSubmit={(e) => {
           e.preventDefault();
-          sendmessage();
+          debouncedSendMessage()
         }}
       >
         <div className="mt-10">

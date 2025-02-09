@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getToken } from "./token";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const Instance = axios.create({
   baseURL: "http://127.0.0.1:3000",
@@ -30,11 +31,12 @@ Instance.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response.status === 401) {
     // 跳转到登录页面
-
+    message.error(error.response.data.msg)
     const navigate = useNavigate()
     navigate('/api/login')
-  } else {
-    return Promise.reject(error)
+  }
+  if(error.response.status === 409){
+    message.error(error.response.data.msg)
   }
 })
 

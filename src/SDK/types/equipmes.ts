@@ -1,4 +1,5 @@
 interface IEquip {
+    userid?: string;
     os: string;
     browser: string;
     deviceType: string;

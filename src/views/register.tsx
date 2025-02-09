@@ -70,19 +70,21 @@ const Register = () => {
       username !== ""
     ) {
       enterLoading(0);
-      //TODO：等待后端返回成功，再打印注册成功
+
+      // 向后端发送注册请求
       try {
         const encryptedPassword = Crytojs.MD5(confirmpassword).toString();
         const result = await Instance.post("/api/register", {
           username,
           password: encryptedPassword,
         });
-        console.log(result);
-
-        message.success("注册成功");
-        navigate("/login");
+        if (result.data.code === 0) {
+          message.success(result.data.msg);
+          navigate("/login");
+          return;
+        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
@@ -109,30 +111,31 @@ const Register = () => {
             }}
           />
           <div className="w-full h-8">
-          {password.length <= 6 && (
-            <p className="text-red-400 text-xs pt-3 flex justify-end">
-              密码长度必须大于6位,且小于16位
-            </p>
-          )}
+            {password.length <= 6 && (
+              <p className="text-red-400 text-xs pt-3 flex justify-end">
+                密码长度必须大于6位,且小于16位
+              </p>
+            )}
           </div>
           <Input.Password
             placeholder="请输入密码"
             autoComplete="password"
             className="w-80 h-10"
             maxLength={16}
-
-
             style={{ marginTop: "10px" }}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               setpassword(e.target.value);
               inputMonitor(e);
             }}
           />
-          <div className="w-full h-8"> {confirmpassword && issame && (
-            <p className="text-red-400 text-xs pt-3 flex justify-end">
-              两次输入密码不一致
-            </p>
-          )}</div>
+          <div className="w-full h-8">
+            {" "}
+            {confirmpassword && issame && (
+              <p className="text-red-400 text-xs pt-3 flex justify-end">
+                两次输入密码不一致
+              </p>
+            )}
+          </div>
           <Input.Password
             placeholder="请再次输入密码"
             autoComplete="currentconfirmpassword"
