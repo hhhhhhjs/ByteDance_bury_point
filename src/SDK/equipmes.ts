@@ -48,16 +48,17 @@ function getDeviceType(userAgent: string) {
 }
 
 // 获取浏览器语言
-const browserLanguage = navigator.language  // 输出例如 "en-US", "zh-CN"
+const browser_language = navigator.language  // 输出例如 "en-US", "zh-CN"
 
 // 获取环境信息
 function getEnvInfo() {
     const userAgent = navigator.userAgent;
     return {
+        userid: sessionStorage.getItem('userid'),
         os: getOS(userAgent),
         browser: getBrowser(userAgent),
-        deviceType: getDeviceType(userAgent),
-        browserLanguage
+        device_type: getDeviceType(userAgent),
+        browser_language
     };
 }
 

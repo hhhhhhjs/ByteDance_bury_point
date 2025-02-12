@@ -65,9 +65,9 @@ const Login = () => {
         password: Crytojs.MD5(password).toString(),
       }).then((res) => {
         if (res.data.code === 0) {
-          console.log(res);
           enterLoading(0);
           setToken(res.data.data.token);
+          sessionStorage.setItem('userid', res.data.data.userid)
           message.success("登录成功");
           clearInput();
           navigate('/home')
@@ -105,7 +105,6 @@ const Login = () => {
             autoComplete="username"
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               setusername(e.target.value);
-              console.log(active);
             }}
           />
           <Input.Password
@@ -118,7 +117,6 @@ const Login = () => {
             maxLength={16}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
               setpassword(e.target.value);
-              console.log(active);
               inputMonitor(e);
             }}
           />

@@ -1,9 +1,9 @@
 interface IEquip {
-    userid?: string;
+    userid?: string | null;
     os: string;
     browser: string;
-    deviceType: string;
-    browserLanguage: string;
+    device_type: string;
+    browser_language: string;
 }
 
 

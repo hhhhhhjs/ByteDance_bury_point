@@ -3,8 +3,10 @@ import App from "../views/App";
 import Login from '../views/login'
 import Register from '../views/register'
 import Home from '../views/home'
+import UserPage from '../views/homecomponent/user'
 import { isLogin } from "../api/islogin";
 import { getToken } from "../api/token";
+
 
 const router = createBrowserRouter([
     {
@@ -25,7 +27,12 @@ const router = createBrowserRouter([
     {
         path: "/home", element: <Home />,
         // 使用 react router 提供的 loader 函数来判断是否登录
-        loader:isLogin
+        loader:isLogin,
+        children: [
+            {
+                path: "user", element: <UserPage />
+            }
+        ]
     }
 ]);
 
