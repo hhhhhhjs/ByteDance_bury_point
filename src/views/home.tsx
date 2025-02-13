@@ -20,13 +20,17 @@ const Home = () => {
     // 前端埋点，检测操作系统，浏览器
     const result: IEquip = getEnvInfo();
     // 向后端发送埋点数据
+
+    const sendMessage = async () => {
+      await Instance.post("/api/userequipment", result).catch((error) => {
+        throw error;
+      });
+    };
     if (!hasrun.current) {
       hasrun.current = true;
-      Instance.post("/api/userequipment", result).catch((error) => {
-        throw error
-      });
+      sendMessage();
+      navigate("/home/user");
     }
-    navigate("/home/user");
   }, []);
 
   const [collapsed, setCollapsed] = useState(false);

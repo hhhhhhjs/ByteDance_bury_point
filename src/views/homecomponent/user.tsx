@@ -40,11 +40,6 @@ function UserPage() {
       if (userid) {
         getuserEquip(userid).then((res) => {
           for (const key in res.data.data) {
-            // distArr.push({
-            //   label:key,
-            //   value:res.data.data[key],
-            //   key:key
-            // })
             setuserdeviceArr((prev) => {
               return prev.map((item: Item) => {
                 if (item.key === key) {
@@ -60,7 +55,7 @@ function UserPage() {
         });
       }
     }
-  }, []);
+  }, [userid]); // 需要根据 userid 变化时重新执行，否则因为异步的原因可能需要刷新后才会显示最新的数据
 
   return (
     <div className="flex flex-wrap gap-25">
