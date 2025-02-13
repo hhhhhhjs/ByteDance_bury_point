@@ -1,13 +1,16 @@
 // Card 组件
+import { Tooltip } from "antd";
 
 interface props {
   title: string;
-  value: number | string;
+  value: string;
+  maxLength: number;
 }
-function Card({ title, value }: props) {
+
+function Card({ title, value, maxLength }: props) {
   return (
     <div
-    className="
+      className="
      w-68 
      h-45 
      bg-Cardbg rounded-lg 
@@ -16,20 +19,23 @@ function Card({ title, value }: props) {
      "
     >
       <p
-      className="
+        className="
       text-xl
       font-bold
       "
-      >{title}</p>
-      <hr 
-      className="
+      >
+        {title}
+      </p>
+      <hr
+        className="
       mt-2
       mb-2
       border-1
       border-blue-200
-      "/>
-      <p 
-      className="
+      "
+      />
+      <p
+        className="
       text-4xl
       font-bold
       w-full
@@ -37,7 +43,14 @@ function Card({ title, value }: props) {
       flex
       justify-center
       items-center
-      ">{value}</p>
+      "
+      >
+        {value.length > maxLength ? (
+          <Tooltip title={value}>{value.slice(0, maxLength)}</Tooltip>
+        ) : (
+          value
+        )}
+      </p>
     </div>
   );
 }

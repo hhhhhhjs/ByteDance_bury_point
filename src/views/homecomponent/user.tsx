@@ -6,6 +6,11 @@ function UserPage() {
   const userid: string | null = sessionStorage.getItem("userid");
   const [userdeviceArr, setuserdeviceArr] = useState<Item[]>([
     {
+      label: 'userid',
+      value: '',
+      key: 'userid'
+    },
+    {
       label: "browser",
       value: "",
       key: "browser",
@@ -25,6 +30,11 @@ function UserPage() {
       value: "",
       key: "device_type",
     },
+    {
+      label: 'upload_time',
+      value: '',
+      key: 'upload_time'
+    }
   ]);
   // 开发环境也只执行一次 effect
   const hasRun = useRef<boolean>(false);
@@ -61,7 +71,7 @@ function UserPage() {
     <div className="flex flex-wrap gap-25">
       {
         userdeviceArr.map((Item: Item) => (
-          <Card title={Item.label} value={Item.value} key={Item.key}></Card>
+          <Card title={Item.label} value={Item.value} maxLength={10} key={Item.key}></Card>
         ))
       }
     </div>
