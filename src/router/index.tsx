@@ -4,6 +4,7 @@ import Login from '../views/login'
 import Register from '../views/register'
 import Home from '../views/home'
 import UserPage from '../views/homecomponent/user'
+import ReportEvent from "../views/homecomponent/reportEvent";
 import { isLogin } from "../api/islogin";
 import { getToken } from "../api/token";
 
@@ -31,6 +32,9 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "user", element: <UserPage />
+            },
+            {
+                path: "reportEvent", element: <ReportEvent /> 
             }
         ]
     }

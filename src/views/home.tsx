@@ -6,6 +6,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -49,6 +50,11 @@ const Home = () => {
       icon: <UserOutlined />,
       label: "user",
     },
+    {
+      key: "2",
+      icon: <AppstoreOutlined />,
+      label: "reportEvent",
+    }
   ];
 
   const handleSelect = (obj: any) => {
