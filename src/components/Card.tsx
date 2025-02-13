@@ -31,6 +31,7 @@ function Card({ title, value }: props) {
       <p 
       className="
       text-4xl
+      font-bold
       w-full
       h-25
       flex

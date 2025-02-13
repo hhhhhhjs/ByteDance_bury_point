@@ -10,7 +10,6 @@ import {
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 
-
 const { Header, Sider, Content } = Layout;
 
 const Home = () => {
@@ -23,15 +22,11 @@ const Home = () => {
     // 向后端发送埋点数据
     if (!hasrun.current) {
       hasrun.current = true;
-      Instance.post("/api/userequipment", result)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      Instance.post("/api/userequipment", result).catch((error) => {
+        throw error
+      });
     }
-    navigate("/home/user")
+    navigate("/home/user");
   }, []);
 
   const [collapsed, setCollapsed] = useState(false);
@@ -44,7 +39,7 @@ const Home = () => {
     icon: React.ReactNode;
     label: string;
   }
-  const item:Array<IItem> = [
+  const item: Array<IItem> = [
     {
       key: "1",
       icon: <UserOutlined />,
@@ -52,13 +47,12 @@ const Home = () => {
     },
   ];
 
-const handleSelect = (obj:any) => {
-  const disobj:IItem = item.filter((item) => {
-    return item.key === obj.key
-  })[0]
-  console.log(disobj)
-  navigate(`/home/${disobj.label}`)
-}
+  const handleSelect = (obj: any) => {
+    const disobj: IItem = item.filter((item) => {
+      return item.key === obj.key;
+    })[0];
+    navigate(`/home/${disobj.label}`);
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
