@@ -1,10 +1,13 @@
 // 上报事件组件
+import { Button } from "antd"
+
 function ReportEvent() {
 
     return (
-        <div>
-            上报事件
-        </div> 
+        
+            <Button data-track='click'>
+                react 组件上报
+            </Button>
     )
 }
 

@@ -61,7 +61,8 @@ class Tracker {
 
         // 发送事件到服务器
         try {
-            Instance.post(this.config.serverUrl, toSendEvent)
+            // Instance.post(this.config.serverUrl, toSendEvent)
+            console.log('上报事件成功', toSendEvent)
 
         } catch (error) {
             console.error('上报事件失败', error)
