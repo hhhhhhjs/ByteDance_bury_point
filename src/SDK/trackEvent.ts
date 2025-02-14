@@ -9,7 +9,6 @@ interface TrackEvent {
 interface TrackerConfig {
     serverUrl: string;
     batchSize: number; // 上报的事件数量
-    flushInterval?: number; // 上报的时间间隔
 }
 
 // 定义上报类
@@ -20,6 +19,11 @@ class Tracker {
 
     constructor(config: TrackerConfig) {
         this.config = config
+
+        // 则每隔 十秒钟 上报一次，以防埋点数量不够导致看板没有数据
+        setInterval(() => {
+            this.flush()
+        }, 10000)
     }
 
 
@@ -36,6 +40,11 @@ class Tracker {
         if (this.config.batchSize && this.queue.length >= this.config.batchSize) {
             this.flush()
         }
+
+        // 在页面卸载前，强制上报所有数据
+        window.addEventListener('beforeunload', () => {
+            this.flush()
+        })
     }
 
     // 上报事件函数
