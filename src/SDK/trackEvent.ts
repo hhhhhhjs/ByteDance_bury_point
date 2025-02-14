@@ -19,11 +19,6 @@ class Tracker {
 
     constructor(config: TrackerConfig) {
         this.config = config
-
-        // 则每隔 十秒钟 上报一次，以防埋点数量不够导致看板没有数据
-        setInterval(() => {
-            this.flush()
-        }, 10000)
     }
 
 
@@ -41,9 +36,18 @@ class Tracker {
             this.flush()
         }
 
+        if (this.queue.length > 0) {
+
+            // 则每隔 十秒钟 上报一次，以防埋点数量不够导致看板没有数据
+            setInterval(() => {
+                this.flush()
+            }, 10000)
+        }
         // 在页面卸载前，强制上报所有数据
         window.addEventListener('beforeunload', () => {
-            this.flush()
+            if (this.queue.length > 0) {
+                this.flush()
+            }
         })
     }
 
