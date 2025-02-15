@@ -1,10 +1,16 @@
 import Instance from "../api/axios";
 
-interface TrackEvent {
+
+interface sendMessage {
+    userid: string;
     eventType: string;
-    eventData: Record<string, unknown>; // 映射类型
     timestamp: number;
-}
+    event_data: {
+      elementText: string | null;
+      elementTag: string;
+    };
+    page_url: string;
+  }
 
 interface TrackerConfig {
     serverUrl: string;
@@ -14,7 +20,7 @@ interface TrackerConfig {
 // 定义上报类
 
 class Tracker {
-    private queue: TrackEvent[] = [];
+    private queue:sendMessage[] = [];
     private config: TrackerConfig
 
     constructor(config: TrackerConfig) {
@@ -23,12 +29,8 @@ class Tracker {
 
 
     // 添加到事件队列
-    public track(eventType: string, eventData: Record<string, unknown>) {
-        const event: TrackEvent = {
-            eventType,
-            eventData,
-            timestamp: Date.now()
-        }
+    public track(eventData: sendMessage) {
+        const event = eventData
         this.queue.push(event)
 
         // 如果上报的事件数量达到了 batchSize，就立即上报
@@ -52,7 +54,7 @@ class Tracker {
     }
 
     // 上报事件函数
-    private flush() {
+    private async flush() {
         if (this.queue.length === 0) {
             return
         }
@@ -61,12 +63,11 @@ class Tracker {
 
         // 发送事件到服务器
         try {
-            // Instance.post(this.config.serverUrl, toSendEvent)
+            await Instance.post(this.config.serverUrl, toSendEvent)
             console.log('上报事件成功', toSendEvent)
 
         } catch (error) {
             console.error('上报事件失败', error)
-
             // 如果上传失败，将事件重新添加到队列中
             this.queue.unshift(...toSendEvent)
         }

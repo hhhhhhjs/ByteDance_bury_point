@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
 const Instance = axios.create({
-  baseURL: "http://127.0.0.1:3000",
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 // 请求拦截器
