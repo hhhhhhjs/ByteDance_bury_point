@@ -1,24 +1,14 @@
 import { Outlet } from "react-router-dom";
-
+import type { sendMessage } from "./homecomponent/types/trackMessage";
 import Tracker from "../SDK/trackEvent";
 import { useEffect } from "react";
 
-interface sendMessage {
-  userid: string;
-  eventType: string;
-  timestamp: number;
-  event_data: {
-    elementText: string | null;
-    elementTag: string;
-  };
-  page_url: string;
-}
 
 function Layout() {
-    const tracker = new Tracker({
-      serverUrl: `${import.meta.env.VITE_BASE_URL}/api/trackEvent`,
-      batchSize: 5,
-    });
+  const tracker = new Tracker({
+    serverUrl: `${import.meta.env.VITE_BASE_URL}/api/trackEvent`,
+    batchSize: 5,
+  });
 
   useEffect(() => {
     const handleClick = async (event: MouseEvent) => {
@@ -41,11 +31,10 @@ function Layout() {
           },
           page_url: window.location.href,
         };
-        try{
-          const response = await tracker.track(sendMessage);
-          // console.log('十秒钟后上报成功',response);
-        }catch(err){
-          console.log(err); 
+        try {
+          await tracker.track(sendMessage);
+        } catch (err) {
+          console.log(err);
         }
       }
     };
@@ -53,7 +42,11 @@ function Layout() {
 
     // 监听全局错误
 
-    window.onerror = function (message, source, lineno, colno, error) {
+    const errorTracker = new Tracker({
+      serverUrl: `${import.meta.env.VITE_BASE_URL}/api/trackError`,
+      batchSize: 5,
+    });
+    window.onerror = async function (message, source, lineno, colno, error) {
       const errorMessage = {
         errorType: message, // 错误类型, 由于有三种错误类型，为了方便统一数据结构，将 errortype 放在最外层
         data: {
@@ -62,34 +55,71 @@ function Layout() {
           colno, // 发生错误的列号
           error, // 错误对象
         },
+        timestamp: new Date().getTime(),
       };
-      console.log(errorMessage);
+
+      try {
+        if (errorMessage.data.error) {
+          await errorTracker.track(errorMessage);
+        }  
+      } catch (err) {
+        console.log(err); 
+      }
     };
 
     // 监听全局 promise 错误
-    window.addEventListener("unhandledrejection", function (event) {
+    window.addEventListener("unhandledrejection", async function (event) {
       const errorMessage = {
         errorType: event.reason.message, // 错误类型
         data: {
           stack: event.reason.stack, // 错误堆栈信息
         },
+        timestamp: new Date().getTime(),
       };
-      console.log(errorMessage);
+
+      try {
+        if (event.reason.message && event.reason.stack) {
+          await errorTracker.track(errorMessage);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     });
 
     // 监听全局资源加载错误
-    window.addEventListener("error", function (event) {
-      const target = event.target as HTMLImageElement | HTMLLinkElement | HTMLScriptElement;
-      if(target && (target.tagName === "IMG" || target.tagName === "SCRIPT" || target.tagName === "LINK")){
+    window.addEventListener("error", async function (event) {
+      const target = event.target as
+        | HTMLImageElement
+        | HTMLLinkElement
+        | HTMLScriptElement;
+      if (
+        target &&
+        (target.tagName === "IMG" ||
+          target.tagName === "SCRIPT" ||
+          target.tagName === "LINK")
+      ) {
         const errorMessage = {
-          errorType: 'Resource load error',
+          errorType: "Resource load error",
           data: {
-            source: target instanceof HTMLImageElement ? target.src : (target instanceof (HTMLLinkElement || HTMLScriptElement)  ? target.href : ''),
+            source:
+              target instanceof HTMLImageElement
+                ? target.src
+                : target instanceof (HTMLLinkElement || HTMLScriptElement)
+                ? target.href
+                : "",
+          },
+          timestamp: new Date().getTime(),
+        };
+        //TODO: 发送错误信息到服务器
+        try{
+          if (errorMessage.data.source) {
+            await errorTracker.track(errorMessage);
           }
+        } catch (err) {
+          console.log(err); 
         }
-        console.log(errorMessage);
       }
-    })
+    });
     return () => {
       document.removeEventListener("click", handleClick);
     };

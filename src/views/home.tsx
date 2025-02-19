@@ -7,6 +7,7 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
   AppstoreOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -44,6 +45,7 @@ const Home = () => {
     icon: React.ReactNode;
     label: string;
   }
+
   const item: Array<IItem> = [
     {
       key: "1",
@@ -54,14 +56,19 @@ const Home = () => {
       key: "2",
       icon: <AppstoreOutlined />,
       label: "reportEvent",
-    }
+    },
+    {
+      key: "3",
+      icon: <CloseOutlined />,
+      label: "errorEvent",
+    },
   ];
 
   const handleSelect = (obj: any) => {
     const disobj: IItem = item.filter((item) => {
       return item.key === obj.key;
     })[0];
-    navigate(`/home/${disobj.label}`);
+    navigate(`/home/${disobj.label.trim()}`);
   };
 
   return (
@@ -79,6 +86,7 @@ const Home = () => {
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
+            data-track="click"
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}

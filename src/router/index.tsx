@@ -6,6 +6,7 @@ import Register from '../views/register'
 import Home from '../views/home'
 import UserPage from '../views/homecomponent/user'
 import ReportEvent from "../views/homecomponent/reportEvent";
+import ErrorPage from "../views/homecomponent/errorPage";
 import { isLogin } from "../api/islogin";
 import { getToken } from "../api/token";
 
@@ -39,6 +40,9 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "reportEvent", element: <ReportEvent /> 
+                    },
+                    {
+                        path: "errorEvent", element: <ErrorPage />
                     }
                 ]
             }  

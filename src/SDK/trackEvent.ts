@@ -2,16 +2,24 @@ import Instance from "../api/axios";
 
 
 interface sendMessage {
-    userid: string;
-    eventType: string;
+    userid?: string;
+    eventType?: string;
+    errorType?: string | Event;
     timestamp: number;
-    event_data: {
+    event_data?: {
       elementText: string | null;
       elementTag: string;
     };
-    page_url: string;
-  }
+    data?: {
+        source?: string | undefined;
+        lineno?: number | undefined;
+        colno?: number | undefined;
+        error?: Error | undefined;
+        stack?: string | null;
+    }
+    page_url?: string;
 
+  }
 interface TrackerConfig {
     serverUrl: string;
     batchSize: number; // 上报的事件数量
@@ -49,6 +57,7 @@ class Tracker {
         window.addEventListener('beforeunload', () => {
             if (this.queue.length > 0) {
                 this.flush()
+                console.log('页面卸载前，强制上报所有数据')
             }
         })
     }
