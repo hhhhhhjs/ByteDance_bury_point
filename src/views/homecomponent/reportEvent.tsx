@@ -15,6 +15,15 @@ function ReportEvent() {
   const userid = sessionStorage.getItem("userid");
   const [eventArr, setEventArr] = useState<Item[]>([]);
   const [selectValue, setSelectValue] = useState<string[]>([]);
+  // 是否清除数据
+  const [isclear,setIsclear] = useState<boolean>(false);
+  const [plusArr, setPlusArr] = useState<Item[]>([
+    // 默认为 click 事件
+    {
+      key: "1",
+      label: "click",
+    },
+  ]);
   const typeArr: string[] = [];
   const typeSet = new Set<string>();
 
@@ -57,7 +66,6 @@ function ReportEvent() {
           value={selectValue}
           onChange={(value) => {
             setSelectValue(value); // 更新 selectValue 状态
-            console.log(value);
           }}
           allowClear
           showSearch
@@ -72,10 +80,32 @@ function ReportEvent() {
         />
       )}
 
-      <Button className="mx-5" type="primary" ghost data-track="click">
+      <Button 
+      className="mx-5" 
+      type="primary" 
+      ghost 
+      data-track="click"
+      onClick={() => {
+        setPlusArr(
+          [
+            ...selectValue.map((item, index) => ({
+              key: String(index + 1),
+              label: item,
+            })),
+          ]
+        )
+        setSelectValue([]);
+      }}
+      >
         添加
       </Button>
-      <Button style={{ position: "absolute", right: "5rem" }} danger>
+      <Button 
+      style={{ position: "absolute", right: "5rem" }} 
+      danger
+      onClick={() => {
+        setIsclear(true);
+      }}
+      >
         清空
       </Button>
       <hr className="my-5 text-[#e4e3e3] border-1" />
@@ -83,11 +113,8 @@ function ReportEvent() {
       <div>
         <p className="text-base font-bold mb-5 ml-5">事件名称</p>
         <HandleEvent
-          Element={[
-            { key: "1", label: "asss" },
-            { key: "2", label: "eee" },
-            { key: "3", label: "ccc" },
-          ]}
+          Element={plusArr}
+          isclear={isclear}
         ></HandleEvent>
       </div>
     </div>

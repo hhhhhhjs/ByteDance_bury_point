@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Item {
   key: string;
@@ -11,9 +11,21 @@ interface removeItem extends Item {
 }
 
 // 事件处理组件
-export const HandleEvent = ({ Element }: { Element: Item[] }) => {
+export const HandleEvent = ({ Element, isclear }: { Element: Item[], isclear:boolean }) => {
   const [optionArr, setOptionArr] = useState<Item[]>(Element);
 
+  useEffect(() => {
+    // 如果 Element 变化，则更新 optionArr
+    setOptionArr(Element);
+  }, [Element]);
+
+  useEffect(() => {
+
+    // 如果 isclear 为 true，则清空数据
+    if (isclear) {
+      setOptionArr([]);
+    }
+  }, [isclear]);
   // 处理删除逻辑
   const handleRemove = (key: string) => {
     // 先触发消失动画
