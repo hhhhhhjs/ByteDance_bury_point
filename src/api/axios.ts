@@ -33,6 +33,7 @@ Instance.interceptors.response.use((response) => {
     // 跳转到登录页面
     message.error(error.response.data.msg)
     const navigate = useNavigate()
+    sessionStorage.clear()
     navigate('/api/login')
   }
   if(error.response.status === 409){

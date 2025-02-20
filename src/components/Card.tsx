@@ -11,8 +11,8 @@ function Card({ title, value, maxLength }: props) {
   return (
     <div
       className="
-     w-68 
-     h-45 
+     w-65 
+     h-40
      bg-Cardbg rounded-lg 
      drop-shadow-sm
      p-5

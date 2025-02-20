@@ -98,7 +98,7 @@ const Home = () => {
             }}
           />
           <Avatar 
-          className="relative left-326"
+          className="relative left-340"
          ></Avatar>
         </Header>
         <Content

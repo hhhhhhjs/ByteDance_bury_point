@@ -1,12 +1,16 @@
 import { useRef, useState } from "react";
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export const Avatar = ({ className, ...rest }: { className: string }) => {
   const username = sessionStorage.getItem("username");
   const changeAvatar = useRef<HTMLInputElement>(null);
   const isshow = useRef<boolean>(true);
   const image = useRef<HTMLImageElement>(null)
+  const divDom = useRef<HTMLDivElement>(null)
+  const [isPop, setIsPop] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>("https://png.pngtree.com/thumb_back/fh260/background/20210207/pngtree-simple-gray-solid-color-background-image_557027.jpg");
-
+  const navigate = useNavigate();
   const getAvatar = (e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -46,7 +50,11 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
             changeAvatar.current?.click();
           }}
           onMouseEnter={() => {
-            console.log('hover一下')
+            console.log(isPop)
+            setIsPop(true)
+          }}
+          onMouseLeave={() => {
+            setIsPop(false)
           }}
         />
          {isshow.current && <p 
@@ -54,9 +62,43 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
         onClick={() => {
             changeAvatar.current?.click();
           }}
+          onMouseEnter={() => {
+            setIsPop(true)
+          }}
+          onMouseLeave={() => {
+            setIsPop(false)
+          }}
         >
           {username?.charAt(0)}
         </p>}
+        {isPop && <div className="
+        w-25 
+        h-20
+        rounded-xl
+        bg-white
+        absolute 
+        transform -translate-x-1/3
+        shadow-lg
+        flex
+        justify-center
+        items-center
+        "
+        ref={divDom}
+        onMouseEnter={() => {
+          setIsPop(true)
+        }}
+        onMouseLeave={() => {
+          setIsPop(false) 
+        }}
+        >
+            <Button
+            color="danger"
+            onClick={() => {
+              sessionStorage.clear()
+              navigate('/login')
+            }}
+            >退出</Button>
+</div>}
     </div>
       <input
         ref={changeAvatar}
