@@ -9,8 +9,9 @@ import {
   AppstoreOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
+import { Button, Flex, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
+import { Avatar } from './homecomponent/avatar'
 
 const { Header, Sider, Content } = Layout;
 
@@ -84,7 +85,7 @@ const Home = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0, background: colorBgContainer, display:'flex'}}>
           <Button
             data-track="click"
             type="text"
@@ -96,6 +97,9 @@ const Home = () => {
               height: 64,
             }}
           />
+          <Avatar 
+          className="relative left-326"
+         ></Avatar>
         </Header>
         <Content
           style={{

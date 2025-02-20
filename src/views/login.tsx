@@ -68,6 +68,7 @@ const Login = () => {
           enterLoading(0);
           setToken(res.data.data.token);
           sessionStorage.setItem('userid', res.data.data.userid)
+          sessionStorage.setItem('username',username)
           message.success("登录成功");
           clearInput();
           navigate('/home')
