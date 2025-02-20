@@ -1,0 +1,16 @@
+@keyframes blink {
+    0% {
+      box-shadow: 0 0 0 0 rgba(96, 212, 225, 0.5); /* 初始状态，颜色为柔和蓝色 */
+    }
+    50% {
+      box-shadow: 0 0 3px 5px rgba(96, 212, 225, 0.5); /* 光圈放大，颜色为柔和蓝色 */
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(96, 212, 225, 0.5); /* 恢复初始状态，颜色为柔和蓝色 */
+    }
+  }
+  
+  
+  .animate-blink {
+    animation: blink 2.3s infinite; /* 1.5秒一次，无限循环 */
+  }
