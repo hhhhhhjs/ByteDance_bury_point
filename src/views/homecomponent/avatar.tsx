@@ -111,6 +111,7 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
         rounded-xl
         bg-white
         absolute 
+        z-10
         transform -translate-x-1/3
         shadow-lg
         flex

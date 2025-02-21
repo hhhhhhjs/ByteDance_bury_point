@@ -31,7 +31,7 @@ Instance.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response.status === 401) {
     // 跳转到登录页面
-    message.error('token过期，请重新登录')
+    message.error('用户名或者密码错误')
     const navigate = useNavigate()
     sessionStorage.clear()
     navigate('/api/login')
