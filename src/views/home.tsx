@@ -9,7 +9,7 @@ import {
   AppstoreOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Button, Flex, Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Avatar } from './homecomponent/avatar'
 
