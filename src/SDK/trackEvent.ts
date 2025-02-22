@@ -16,6 +16,7 @@ interface sendMessage {
         colno?: number | undefined;
         error?: Error | undefined;
         stack?: string | null;
+        message?: string | null;
     }
     page_url?: string;
 

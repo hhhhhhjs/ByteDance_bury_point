@@ -120,6 +120,68 @@ function Layout() {
         }
       }
     });
+
+
+     // 白屏监控
+     const checkWhiteScreen = async () => {
+      const wrapperElements = ["html", "body", "#root"];
+      let emptyPoints = 0;
+
+      function getSelector(element: Element) {
+        if (element.id) {
+          return `#${element.id}`;
+        } else if (element.className) {
+          return `.${element.className.split(" ").filter(Boolean).join(".")}`;
+        } else {
+          return element.nodeName.toLowerCase();
+        }
+      }
+
+      function isWrapperElement(element: Element) {
+        const selector = getSelector(element);
+        return wrapperElements.includes(selector);
+      }
+
+      document.body.addEventListener(
+        "click",
+        () => {
+          emptyPoints = 0;
+        },
+        true
+      );
+
+      const interval = setInterval(() => {
+        const elements = document.elementsFromPoint(
+          window.innerWidth / 2,
+          window.innerHeight / 2
+        );
+        if (elements.length) {
+          for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+            if (isWrapperElement(element)) {
+              emptyPoints++;
+            }
+          }
+        }
+        if (emptyPoints >= 2) {
+          const errorMessage = {
+            errorType: "White screen error",
+            data: {
+              message: "White screen detected",
+            },
+            timestamp: new Date().getTime(),
+          };
+          errorTracker.track(errorMessage);
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    };
+
+    checkWhiteScreen();
     return () => {
       document.removeEventListener("click", handleClick);
     };
