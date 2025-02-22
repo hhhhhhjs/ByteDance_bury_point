@@ -2,6 +2,7 @@ import { getEnvInfo } from "../SDK/equipmes";
 import type { IEquip } from "../SDK/types/equipmes";
 import { useEffect, useRef, useState } from "react";
 import Instance from "../api/axios";
+import { reportUserview } from "../api/home/UvData";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -11,9 +12,11 @@ import {
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Avatar } from './homecomponent/avatar'
+import { Avatar } from "./homecomponent/avatar";
 
 const { Header, Sider, Content } = Layout;
+const userid = sessionStorage.getItem("userid");
+const username = sessionStorage.getItem("username");
 
 const Home = () => {
   // 使用 ref 确保在开发环境中只执行一次 effect 中的代码逻辑
@@ -24,14 +27,24 @@ const Home = () => {
     const result: IEquip = getEnvInfo();
     // 向后端发送埋点数据
 
-    const sendMessage = async () => {
-      await Instance.post("/api/userequipment", result).catch((error) => {
-        throw error;
-      });
+    const sendMessage = async (data: IEquip) => {
+      return Instance.post("/api/userequipment", data);
+    };
+
+    const reportUVmessage = {
+      userid: userid!,
+      username: username!,
+      visit_date: new Date().toISOString(),
     };
     if (!hasrun.current) {
       hasrun.current = true;
-      sendMessage();
+      Promise.all([sendMessage(result), reportUserview(reportUVmessage)])
+        .then((res) => {
+          console.log("promise all sucess", res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       navigate("/home/user");
     }
   }, []);
@@ -63,6 +76,11 @@ const Home = () => {
       icon: <CloseOutlined />,
       label: "errorEvent",
     },
+    {
+      key: "4",
+      icon: <CloseOutlined />,
+      label: "visualBoard",
+    },
   ];
 
   const handleSelect = (obj: any) => {
@@ -85,7 +103,9 @@ const Home = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer, display:'flex'}}>
+        <Header
+          style={{ padding: 0, background: colorBgContainer, display: "flex" }}
+        >
           <Button
             data-track="click"
             type="text"
@@ -97,10 +117,7 @@ const Home = () => {
               height: 64,
             }}
           />
-          <Avatar 
-          data-track="click"
-          className="relative left-340"
-         ></Avatar>
+          <Avatar data-track="click" className="relative left-340"></Avatar>
         </Header>
         <Content
           style={{

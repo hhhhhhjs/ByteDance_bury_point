@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getToken } from "./token";
-import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
 const Instance = axios.create({
@@ -11,7 +10,7 @@ const Instance = axios.create({
 Instance.interceptors.request.use((config) => {
   const token = getToken();
 
-  const excludeUrls = ['/api/login', '/api/register']
+  const excludeUrls = ['/api/login', '/api/register', '/api/trackError']
 
   if (token && !excludeUrls.includes(config.url as string)) {
     config.headers.Authorization = `Bearer ${token}`
@@ -25,18 +24,34 @@ Instance.interceptors.request.use((config) => {
 })
 
 
+// const codeList = [
+//   { code: 1001, msg: '用户名或者密码错误' },
+//   { code: 1002, msg: 'token 过期, 请重新登录' },
+//   { code: 1003, msg: '无效的 token' },
+// ]
 // 响应拦截器
 Instance.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   if (error.response.status === 401) {
     // 跳转到登录页面
-    message.error('用户名或者密码错误')
-    const navigate = useNavigate()
-    sessionStorage.clear()
-    navigate('/api/login')
+
+    switch (error.response.data.code) {
+      case 1001:
+        message.error('用户名或者密码错误')
+        break;
+      case 1002:
+        message.error('token 过期，请重新登录')
+        sessionStorage.clear()
+        window.location.href = '/login'
+        break;
+      case 1003:
+        message.error('无效的 token')
+        sessionStorage.clear()
+        window.location.href = '/login'
+    }
   }
-  if(error.response.status === 409){
+  if (error.response.status === 409) {
     message.error(error.response.data.msg)
   }
 

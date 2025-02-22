@@ -7,6 +7,7 @@ import Home from '../views/home'
 import UserPage from '../views/homecomponent/user'
 import ReportEvent from "../views/homecomponent/reportEvent";
 import ErrorPage from "../views/homecomponent/errorPage";
+import VisualBoard from '../views/homecomponent/visualboard'
 import { isLogin } from "../api/islogin";
 import { getToken } from "../api/token";
 
@@ -43,6 +44,9 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "errorEvent", element: <ErrorPage />
+                    },
+                    {
+                        path: "visualBoard", element: <VisualBoard />
                     }
                 ]
             }  

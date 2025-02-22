@@ -131,6 +131,8 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
               onClick={() => {
                 sessionStorage.clear();
                 navigate("/login");
+                // 在退出登录之后需要刷新浏览器，否则会出现缓存问题
+                location.reload()
               }}
             >
               退出
