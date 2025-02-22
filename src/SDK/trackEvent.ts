@@ -17,6 +17,7 @@ interface sendMessage {
         error?: Error | undefined;
         stack?: string | null;
         message?: string | null;
+        page_url?: string;
     }
     page_url?: string;
 
