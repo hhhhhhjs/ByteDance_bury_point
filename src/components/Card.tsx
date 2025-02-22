@@ -52,7 +52,7 @@ function Card({ title, value, maxLength }: props) {
         )}
       </p>
     </div>
-  );
+  )
 }
 
 export default Card;

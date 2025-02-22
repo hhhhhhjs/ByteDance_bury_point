@@ -98,6 +98,7 @@ const Home = () => {
             }}
           />
           <Avatar 
+          data-track="click"
           className="relative left-340"
          ></Avatar>
         </Header>

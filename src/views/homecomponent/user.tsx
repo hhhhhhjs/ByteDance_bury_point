@@ -68,7 +68,7 @@ function UserPage() {
   }, [userid]); // 需要根据 userid 变化时重新执行，否则因为异步的原因可能需要刷新后才会显示最新的数据
 
   return (
-    <div className="flex flex-wrap gap-12">
+    <div className="flex flex-wrap gap-7">
       {
         userdeviceArr.map((Item: Item) => (
           <Card title={Item.label} value={Item.value} maxLength={10} key={Item.key}></Card>
