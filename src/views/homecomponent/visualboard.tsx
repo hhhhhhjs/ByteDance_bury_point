@@ -40,7 +40,8 @@ const VisualBoard = () => {
   useEffect(() => {
     if (!hasRun.current) {
       hasRun.current = true;
-      getUvData(twodays, today)
+      // 初始值为今天
+      getUvData(today, today)
         .then((res) => {
           const dates = res.data.data.map((item: Item) => item.date);
           const usernums = res.data.data.map((item: Item) => item.usernums);
@@ -64,7 +65,7 @@ const VisualBoard = () => {
           console.log(err);
         });
     }
-  }, [twodays, today, chartType]);
+  }, [today, chartType]);
 
   const selectOption = [
     {
