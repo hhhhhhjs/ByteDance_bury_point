@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { Button, message } from "antd";
-import { useNavigate } from "react-router-dom";
 import { uploadAvatar } from "../../api/avatar";
 import { getUserAvatar } from "../../api/avatar";
 
@@ -16,8 +15,6 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
     "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJ0ApwMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAEf/EABYBAQEBAAAAAAAAAAAAAAAAAAABBv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ANUA0jGgAAAAAAAAAAAAAAAAAAAAIKoigigAAICRRRFAAAASAqKAigAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACpVAEUAABEoKKgoAAIJVQUFARQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAABQAQAAAFAAABAAAAUAEEUFRQAAEAAQUFAAABBFBUUAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAUEUAAQAABBVAAAEABQRQABH//Z"
   );
   const hasRun = useRef<boolean>(false);
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (!hasRun.current) {
       hasRun.current = true;
@@ -67,6 +64,7 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
     <>
       <div className={`${className}`}>
         <img
+        alt="User Avatar"
         crossOrigin="use-credentials"
           className={`
              w-15 h-15
@@ -130,9 +128,8 @@ export const Avatar = ({ className, ...rest }: { className: string }) => {
               color="danger"
               onClick={() => {
                 sessionStorage.clear();
-                navigate("/login");
                 // 在退出登录之后需要刷新浏览器，否则会出现缓存问题
-                location.reload()
+                window.location.href = '/login';
               }}
             >
               退出

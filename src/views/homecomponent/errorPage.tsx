@@ -95,7 +95,7 @@ const columns: TableProps<DataType>["columns"] = [
     },
   },
   {
-    title: "time",
+    title: "TrackTime",
     key: "timestamp",
     dataIndex: "timestamp",
   },

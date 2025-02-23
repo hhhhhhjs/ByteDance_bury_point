@@ -9,19 +9,20 @@ import {
   UserOutlined,
   AppstoreOutlined,
   CloseOutlined,
+  PictureOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Avatar } from "./homecomponent/avatar";
 
 const { Header, Sider, Content } = Layout;
-const userid = sessionStorage.getItem("userid");
-const username = sessionStorage.getItem("username");
-
 const Home = () => {
   // 使用 ref 确保在开发环境中只执行一次 effect 中的代码逻辑
   const hasrun = useRef<boolean>(false);
   const navigate = useNavigate();
+  const userid = sessionStorage.getItem("userid");
+  const username = sessionStorage.getItem("username");
+
   useEffect(() => {
     // 前端埋点，检测操作系统，浏览器
     const result: IEquip = getEnvInfo();
@@ -39,9 +40,6 @@ const Home = () => {
     if (!hasrun.current) {
       hasrun.current = true;
       Promise.all([sendMessage(result), reportUserview(reportUVmessage)])
-        .then((res) => {
-          console.log("promise all sucess", res);
-        })
         .catch((error) => {
           console.log(error);
         });
@@ -78,7 +76,7 @@ const Home = () => {
     },
     {
       key: "4",
-      icon: <CloseOutlined />,
+      icon: <PictureOutlined />,
       label: "visualBoard",
     },
   ];
