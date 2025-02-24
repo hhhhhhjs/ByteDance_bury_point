@@ -18,10 +18,6 @@ const VisualBoard = () => {
   const [chartType, setChartType] = useState("bar");
   const [resMes, setresMes] = useState<Item[]>([]);
 
-  const twodays = new Date(
-    datetamp.getTime() - 2 * 24 * 60 * 60 * 1000
-  ).toISOString();
-
   const today = datetamp.toISOString();
   const week = new Date(
     datetamp.getTime() - 7 * 24 * 60 * 60 * 1000
@@ -113,6 +109,9 @@ const VisualBoard = () => {
           ...initoption.xAxis,
           data: resMes.map((item: Item) => item.date),
         },
+        yAxis: {
+          ...initoption.yAxis,
+        },
         series: [
           {
             ...initoption.series[0],
@@ -124,6 +123,7 @@ const VisualBoard = () => {
     } else {
       setOption({
         ...pieOption,
+  
         series: [
           {
             ...pieOption.series[0],
@@ -142,22 +142,39 @@ const VisualBoard = () => {
     const [starDate, endDate] = value.split("&");
     getUvData(starDate, endDate).then((res) => {
       setresMes(res.data.data);
-      setOption({
-       ...initoption,
-        xAxis: {
-         ...initoption.xAxis,
-          data: res.data.data.map((item: Item) => item.date),
-        },
-        series: [
-          {
-           ...initoption.series[0],
-            type: chartType,
-            data: res.data.data.map((item: Item) => item.usernums),
-          },      
-        ] 
-      })
+      if (chartType === "pie") {
+        setOption({
+          ...pieOption,
+          series: [
+            {
+              ...pieOption.series[0],
+              type: chartType,
+              data: res.data.data.map((item: Item) => ({
+                name: item.date,
+                value: item.usernums,
+              })),
+            },
+          ],
+        });
+      } else {
+        setOption({
+          ...initoption,
+          xAxis: {
+            ...initoption.xAxis,
+            data: res.data.data.map((item: Item) => item.date),
+          },
+          series: [
+            {
+              ...initoption.series[0],
+              type: chartType,
+              data: res.data.data.map((item: Item) => item.usernums),
+            },
+          ],
+        });
+      }
     });
   };
+
   return (
     <div>
       <div className="ml-10 flex gap-10 font-bold">
@@ -189,7 +206,10 @@ const VisualBoard = () => {
           ></Select>
         </div>
       </div>
-      <ReactECharts option={option} />
+      <ReactECharts 
+      option={option} 
+      notMerge={true}
+      />
     </div>
   );
 };
