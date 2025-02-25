@@ -1,3 +1,4 @@
+import { color } from "echarts";
 
 // 柱状图 && 折线图 option
 export const option = {
@@ -54,8 +55,11 @@ export const option = {
 
 export const pieOption = {
   title: {
-      text: '每日 UV 统计', // 图表标题
+      text: 'UV 统计', // 图表标题
       left: 'center', // 标题居中
+      textStyle: {
+          color: '#0099CC', // 标题颜色 
+      }
   },
   tooltip: {
       trigger: 'item', // 鼠标悬停时显示提示信息
@@ -74,6 +78,7 @@ export const pieOption = {
           emphasis: {
               itemStyle: {
                   shadowBlur: 10, // 高亮时阴影效果
+                  color: '#99CCFF', // 高亮时颜色
                   shadowOffsetX: 0,
                   shadowColor: 'rgba(0, 0, 0, 0.5)',
               },

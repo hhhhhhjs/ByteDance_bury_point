@@ -153,6 +153,7 @@ const VisualBoard = () => {
                 name: item.date,
                 value: item.usernums,
               })),
+              itemStyle: undefined
             },
           ],
         });
@@ -177,7 +178,7 @@ const VisualBoard = () => {
 
   return (
     <div>
-      <div className="ml-10 flex gap-10 font-bold">
+      <div className="ml-10 flex gap-10 font-bold text-[#4f9ce9]">
         <div>
           <span>Select Date :</span>
           <Select
@@ -189,7 +190,7 @@ const VisualBoard = () => {
             defaultActiveFirstOption={true}
             onSelect={handleSelectTime}
           ></Select>
-        </div>
+        </div>    
         <div>
           <span>chartType : </span>
           <Select
@@ -207,6 +208,7 @@ const VisualBoard = () => {
         </div>
       </div>
       <ReactECharts 
+      className="mt-10"
       option={option} 
       notMerge={true}
       />
