@@ -5,7 +5,20 @@
 本项目旨在开发一个完整的埋点研发体系，提供项目用户行为分析、性能监控、报警监控的能力
 
 ## skill stack
-VITE + React + TS + Koa + Mysql
+React + Vite + TS + Koa + Mysq
+
+## 功能介绍
+* 完整的登录注册功能
+* 头像上传 && 头像持久化
+* 较为完善埋点事件上报功能
+* 错误捕获功能
+* 可切换的可视化图表/看板
+
+## 使用
+* `npm install || bun install || pnpm install`
+* `npm run dev`
+* 后端默认监听 3000 端口，跨域允许源 localhost:5713
+
 
 
 
