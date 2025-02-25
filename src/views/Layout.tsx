@@ -3,8 +3,8 @@ import type { sendMessage } from "./homecomponent/types/trackMessage";
 import Tracker from "../SDK/trackEvent";
 import { useEffect } from "react";
 
-
 function Layout() {
+
   const tracker = new Tracker({
     serverUrl: `${import.meta.env.VITE_BASE_URL}/api/trackEvent`,
     batchSize: 5,
@@ -121,67 +121,6 @@ function Layout() {
       }
     });
 
-
-    //  // 白屏监控
-    //  const checkWhiteScreen = async () => {
-    //   const wrapperElements = ["html", "body", "#root"];
-    //   let emptyPoints = 0;
-
-    //   function getSelector(element: Element) {
-    //     if (element.id) {
-    //       return `#${element.id}`;
-    //     } else if (element.className) {
-    //       return `.${element.className.split(" ").filter(Boolean).join(".")}`;
-    //     } else {
-    //       return element.nodeName.toLowerCase();
-    //     }
-    //   }
-
-    //   function isWrapperElement(element: Element) {
-    //     const selector = getSelector(element);
-    //     return wrapperElements.includes(selector);
-    //   }
-
-    //   document.body.addEventListener(
-    //     "click",
-    //     () => {
-    //       emptyPoints = 0;
-    //     },
-    //     true
-    //   );
-
-    //   const interval = setInterval(() => {
-    //     const elements = document.elementsFromPoint(
-    //       window.innerWidth / 2,
-    //       window.innerHeight / 2
-    //     );
-    //     if (elements.length) {
-    //       for (let i = 0; i < elements.length; i++) {
-    //         const element = elements[i];
-    //         if (isWrapperElement(element)) {
-    //           emptyPoints++;
-    //         }
-    //       }
-    //     }
-    //     if (emptyPoints >= 2) {
-    //       const errorMessage = {
-    //         errorType: "White screen error",
-    //         data: {
-    //           message: "White screen detected",
-    //         },
-    //         timestamp: new Date().getTime(),
-    //       };
-    //       errorTracker.track(errorMessage);
-    //       clearInterval(interval);
-    //     }
-    //   }, 1000);
-
-    //   return () => {
-    //     clearInterval(interval);
-    //   };
-    // };
-
-    // checkWhiteScreen();
      // 白屏监控
      const checkWhiteScreen = () => {
       const rootElement = document.getElementById("root"); // 假设根元素的 id 是 "root"
@@ -203,6 +142,8 @@ function Layout() {
 
     // 每隔 5 秒检查一次白屏
     const whiteScreenInterval = setInterval(checkWhiteScreen, 5000);
+
+    
     return () => {
       document.removeEventListener("click", handleClick);
       clearInterval(whiteScreenInterval); // 清除定时器

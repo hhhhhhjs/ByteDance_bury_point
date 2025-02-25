@@ -3,6 +3,7 @@ import type { IEquip } from "../SDK/types/equipmes";
 import { useEffect, useRef, useState } from "react";
 import Instance from "../api/axios";
 import { reportUserview } from "../api/home/UvData";
+import { reportPageView } from "../api/home/PvData";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,7 +13,7 @@ import {
   PictureOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Avatar } from "./homecomponent/avatar";
 
 const { Header, Sider, Content } = Layout;
@@ -22,6 +23,9 @@ const Home = () => {
   const navigate = useNavigate();
   const userid = sessionStorage.getItem("userid");
   const username = sessionStorage.getItem("username");
+  const location = useLocation();
+  // 用来处理在开发环境中并且 location 发生变化时只执行一次 useEffect 中的代码逻辑
+  const prevLocation = useRef(location);
 
   useEffect(() => {
     // 前端埋点，检测操作系统，浏览器
@@ -39,13 +43,43 @@ const Home = () => {
     };
     if (!hasrun.current) {
       hasrun.current = true;
-      Promise.all([sendMessage(result), reportUserview(reportUVmessage)])
-        .catch((error) => {
+      Promise.all([sendMessage(result), reportUserview(reportUVmessage)]).catch(
+        (error) => {
           console.log(error);
-        });
+        }
+      );
       navigate("/home/user");
     }
   }, []);
+
+  // 这里只统计用户登录完毕之后的 pv
+  useEffect(() => {
+    // 用户看板不需要上报 pv，如果上报需要添加字段，用来处理 getpageview 需要在 reportpageview 之后进行
+    if (
+      location.pathname !==
+      `/home/visualBoard`
+    ) {
+      if (location !== prevLocation.current) {
+        prevLocation.current = location;
+        const page_url = window.location.href;
+        const access_complete_date = new Date().toISOString();
+        const pvmessage = {
+          userid: userid!,
+          username: username!,
+          page_url,
+          access_complete_date,
+        };
+
+        reportPageView(pvmessage)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error: Error) => {
+            console.log(error);
+          });
+      }
+    }
+  }, [location, userid, username]);
 
   const [collapsed, setCollapsed] = useState(false);
   const {

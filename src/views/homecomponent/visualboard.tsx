@@ -2,6 +2,7 @@ import ReactECharts from "echarts-for-react";
 import { option as initoption, pieOption } from "../../Echarts/UserView";
 import { useEffect, useRef, useState } from "react";
 import { getUvData } from "../../api/home/UvData";
+import { getPvData } from "../../api/home/PvData";
 import { Select } from "antd";
 
 interface Item {
@@ -60,6 +61,9 @@ const VisualBoard = () => {
         .catch((err) => {
           console.log(err);
         });
+        getPvData(today, today).then((res) => {
+          console.log(res)
+        })
     }
   }, [today, chartType]);
 
