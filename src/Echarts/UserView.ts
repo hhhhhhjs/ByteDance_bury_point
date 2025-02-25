@@ -86,16 +86,3 @@ export const pieOption = {
 };
 
 
-// pv 折线图 && 柱状图 option
-export const pvOption = {
-  title: {
-      text: 'PV 统计', // 图表标题
-      left: 'center', // 标题居中
-      textStyle: {
-          color: '#0099CC', // 标题颜色
-      }
-  }, 
-  tooltip: {
-    
-  }
-}

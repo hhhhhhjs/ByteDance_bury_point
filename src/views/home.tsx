@@ -71,9 +71,6 @@ const Home = () => {
         };
 
         reportPageView(pvmessage)
-          .then((res) => {
-            console.log(res);
-          })
           .catch((error: Error) => {
             console.log(error);
           });
